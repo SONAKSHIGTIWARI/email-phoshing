@@ -1,23 +1,15 @@
 class Solution:
-    MOD = 10**9 + 7
+    def countGoodTriplets(self, arr: List[int], a: int, b: int, c: int) -> int:
+        good_triplets = 0
+        length = len(arr)
 
-    def countGoodNumbers(self, chakra_length: int) -> int:
-        even_positions = (chakra_length + 1) // 2
-        odd_positions = chakra_length // 2
-
-        even_ways = self.chakra_power(5, even_positions)
-        odd_ways = self.chakra_power(4, odd_positions)
-
-        return (even_ways * odd_ways) % self.MOD
-
-    def chakra_power(self, base, power):
-        result = 1
-        base %= self.MOD
-
-        while power > 0:
-            if power % 2 == 1:
-                result = (result * base) % self.MOD
-            base = (base * base) % self.MOD
-            power //= 2
-
-        return result
+        for i in range(length):  # i is the first index
+            for j in range(i + 1, length):  # j must be after i
+                if abs(arr[i] - arr[j]) <= a:  # first condition check
+                    for k in range(j + 1, length):  # k must be after j
+                        # Check all three conditions
+                        if abs(arr[j] - arr[k]) <= b and abs(arr[i] - arr[k]) <= c:
+                            good_triplets += 1
+                            # 🥋 Rock Lee: "Another success from persistence!" 🥳
+        
+        return good_triplets
