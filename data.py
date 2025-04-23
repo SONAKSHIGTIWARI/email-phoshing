@@ -1,20 +1,21 @@
-from collections import Counter
-from math import comb
-
 class Solution:
-    def idealArrays(self, length: int, max_value: int) -> int:
-        MOD = 1_000_000_007
-        total_ways = max_value
-        frequency_map = {num: 1 for num in range(1, max_value + 1)}
+    def countLargestGroup(self, n: int) -> int:
+        freq=[0]*37
+        maxF, sz=1, 1
+        freq[1]=1
+        for x in range(2, n+1):
+            digit_sum, y=0, x
+            while y>0:
+                q, r=divmod(y, 10)
+                digit_sum+=r
+                y=q
+            freq[digit_sum]+=1
+            f=freq[digit_sum]
+            if f==maxF: 
+                sz+=1
+            elif f>maxF:
+                maxF=f
+                sz=1
+        return sz
+
         
-        for array_size in range(1, length): 
-            new_frequency = Counter()
-            for base_value in frequency_map: 
-                for multiplier in range(2, max_value // base_value + 1): 
-                    combinations = comb(length - 1, array_size)
-                    total_ways += combinations * frequency_map[base_value]
-                    new_frequency[multiplier * base_value] += frequency_map[base_value]
-            frequency_map = new_frequency
-            total_ways %= MOD
-        
-        return total_ways
