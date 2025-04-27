@@ -1,17 +1,24 @@
-from collections import defaultdict
-
 class Solution:
-    def countInterestingSubarrays(self, nums: List[int], m: int, k: int) -> int:
-        count = 0
-        mod_map = defaultdict(int)
-        mod_map[0] = 1
-        total = 0
+    def removeDuplicateLetters(self, s: str) -> str:
+        # Dictionary to store the last occurrence of each character
+        last_occur = {}
 
-        for num in nums:
-            if num % m == k:
-                count += 1
-            remainder = (count - k) % m
-            total += mod_map[remainder]
-            mod_map[count % m] += 1
+        # Record the last occurrence of each character
+        for i, char in enumerate(s):
+            last_occur[char] = i        
 
-        return total        
+        stack = []  # Stack to store characters in the desired order
+        visited = set()  # Set to keep track of visited characters
+
+        for i in range(len(s)):
+            if s[i] in visited:
+                continue  # Skip if the character is already visited
+
+            # If the top of the stack is greater than s[i] and will occur later again, remove from stack
+            while stack and s[i] < stack[-1] and i < last_occur.get(stack[-1], -1):
+                visited.remove(stack.pop())
+
+            visited.add(s[i])  # Mark as visited
+            stack.append(s[i])  # Add to the stack
+        
+        return ''.join(stack)  # Concatenate the characters remaining in the stack
